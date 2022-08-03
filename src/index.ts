@@ -84,11 +84,24 @@ app.post('/fileupload', upload.single('fileKey'), async (req, res) => {
 
 	signPathArr[signIdx] = filePath;
 
-	CONN.insertar('contract', [{
-		...contract,
-		signature_path: JSON.stringify(signPathArr),
-		date_modified: new Date()
-	}], true)
+	if (file.originalname.indexOf(' company.jpg') < 0) {
+
+		CONN.insertar('contract', [{
+			...contract,
+			signature_path: JSON.stringify(signPathArr),
+			date_modified: new Date()
+		}], true);
+
+	} else {
+
+		CONN.insertar('contract', [{
+			...contract,
+			signature_company_path: filePath,
+			date_modified: new Date()
+		}], true)
+
+	}
+
 
 	datos['success'] = true;
 	res.send(datos);
